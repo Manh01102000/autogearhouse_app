@@ -1,0 +1,149 @@
+// src/pages/Dashboard.scss
+$primary-color: #4361ee;
+$secondary-color: #3f37c9;
+$success-color: #4cc9f0;
+$danger-color: #f72585;
+$warning-color: #f8961e;
+$light-color: #f8f9fa;
+$dark-color: #212529;
+$border-color: #e0e0e0;
+$card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+.admin-dashboard {
+    padding: 20px;
+    background-color: #f5f7fa;
+    min-height: calc(100vh - 70px);
+
+    .dashboard-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: $dark-color;
+        margin-bottom: 25px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: $card-shadow;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+
+            &:hover {
+                transform: translateY(-5px);
+            }
+
+            .stat-icon {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 20px;
+                font-size: 24px;
+                color: white;
+
+                &.users {
+                    background: linear-gradient(135deg, $primary-color, $secondary-color);
+                }
+
+                &.products {
+                    background: linear-gradient(135deg, $success-color, #4895ef);
+                }
+
+                &.orders {
+                    background: linear-gradient(135deg, $warning-color, #f3722c);
+                }
+
+                &.revenue {
+                    background: linear-gradient(135deg, #38b000, #70e000);
+                }
+            }
+
+            .stat-info {
+                h3 {
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #6c757d;
+                    margin: 0 0 5px 0;
+                }
+
+                .stat-value {
+                    font-size: 22px;
+                    font-weight: 600;
+                    color: $dark-color;
+                    margin: 0 0 5px 0;
+                }
+
+                .stat-change {
+                    font-size: 12px;
+                    margin: 0;
+
+                    &.positive {
+                        color: #38b000;
+                    }
+
+                    &.negative {
+                        color: $danger-color;
+                    }
+                }
+            }
+        }
+    }
+
+    .dashboard-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+
+        @media (max-width: 1200px) {
+            grid-template-columns: 1fr;
+        }
+
+        .recent-orders,
+        .quick-stats {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: $card-shadow;
+
+            h2 {
+                font-size: 18px;
+                font-weight: 600;
+                color: $dark-color;
+                margin-top: 0;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid $border-color;
+            }
+        }
+
+        .orders-table,
+        .stats-chart {
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .admin-dashboard {
+        padding: 15px;
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+}

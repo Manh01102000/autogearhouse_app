@@ -1,5 +1,5 @@
 function Products() {
-    return <h1>404 - Không tìm thấy trang</h1>;
+    return <h1>alo</h1>;
 }
 
 export default Products;

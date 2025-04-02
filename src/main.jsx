@@ -10,10 +10,13 @@ import { HelmetProvider } from "react-helmet-async";
 // Nó là phiên bản cải tiến của react-helmet, với hỗ trợ tốt hơn cho SSR (Server-Side Rendering) và hiệu suất cao hơn.
 // css main
 import "./assets/css/global.css"; // Import CSS toàn cục
+import { LoadingProvider } from "./contexts/LoadingContext";
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <HelmetProvider>
-            <App />
+            <LoadingProvider>
+                <App />
+            </LoadingProvider>
         </HelmetProvider>
-    </React.StrictMode>
+    // </React.StrictMode>
 );
