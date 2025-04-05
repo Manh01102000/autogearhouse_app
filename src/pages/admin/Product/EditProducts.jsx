@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../../../components/admin/Layout/AdminLayout';
 import './addProducts.scss';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 // import function
 import * as functions from "../../../utils/function";
 // Import service
@@ -14,11 +14,11 @@ import * as ModelProductService from '../../../services/ModelProductService';
 import upload_img from '../../../assets/images/admin/upload_img.png';
 import icons_plus_file from '../../../assets/images/admin/icons_plus_file.png';
 import icon_delete from '../../../assets/images/admin/icon_delete.png';
-import { useLoading } from "../../../contexts/LoadingContext";
 
-
-const AddProducts = () => {
+const EditProducts = () => {
+    const { id } = useParams();
     // state
+    const [products, setProducts] = useState([]);
     const [showMileage, setShowMileage] = useState(false);
     const [showFeeship, setShowFeeship] = useState(false);
     const [getCategory, setCategory] = useState([]);
@@ -26,22 +26,21 @@ const AddProducts = () => {
     const [getBrand, setBrand] = useState([]);
     const [getModelProduct, setModelProduct] = useState([]);
     const [loading, setLoading] = useState(true);
-    // Hàm lấy loading context
-    const { showLoading, hideLoading } = useLoading();
+    // Kiểm tra trạng thái của api phục vụ setvalue
+    const [apiStates, setApiStates] = useState([]);
     // files
+    const [fileOlds, setFileOlds] = useState([]);
+    const [fileDels, setFileDels] = useState([]);
     const [files, setFiles] = useState([]);
     // product type
     const [variants, setVariant] = useState([]);
     // 
     const navigate = useNavigate();
-    const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting }, setError } = useForm();
-
-    const password = watch('emp_password');
-
+    const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting }, setError, setValue } = useForm();
     // ONSUBMIT
     const onSubmit = async (data) => {
         try {
-            showLoading();
+
             const formData = new FormData();
 
             // Xử lý files mới
@@ -53,6 +52,26 @@ const AddProducts = () => {
                     formData.append('product_images[]', actualFile);
                 }
             });
+
+            // Xử lý file đã xóa + Xử lý file cũ không bị xóa
+            function extractFilesByType(files, type) {
+                return files
+                    .filter(item => item.type.startsWith(type))
+                    .map(item => item.file);
+            }
+
+            // Xử lý file đã xóa
+            let product_videos_del = extractFilesByType(fileDels, 'video');
+            let product_images_del = extractFilesByType(fileDels, 'image');
+
+            // Xử lý file cũ không bị xóa
+            let product_videos_old = extractFilesByType(fileOlds, 'video');
+            let product_images_old = extractFilesByType(fileOlds, 'image');
+
+            formData.append('product_videos_del', product_videos_del.join(','));
+            formData.append('product_images_del', product_images_del.join(','));
+            formData.append('product_videos_old', product_videos_old.join(','));
+            formData.append('product_images_old', product_images_old.join(','));
 
             // Append các field dữ liệu
             Object.keys(data).forEach((key) => {
@@ -77,7 +96,7 @@ const AddProducts = () => {
                 'Authorization': `Bearer ${token}`,
             };
             // Gọi api
-            const response = await ProductService.createProduct(formData, headers);
+            const response = await ProductService.updateProduct(id, formData, headers);
             // Trả dữ liệu
             if (response?.result) {
                 alert(response.message);
@@ -94,11 +113,9 @@ const AddProducts = () => {
                 type: 'server',
                 message: err?.message || 'Có lỗi xảy ra khi thêm sản phẩm'
             });
-        } finally {
-            hideLoading();
         }
     };
-
+    // Thay đổi trạng thái mới cũ
     const handleChangeOldNew = (e) => {
         let val = e.target.value;
         if (val == 1) {
@@ -110,7 +127,7 @@ const AddProducts = () => {
             setShowMileage(true);
         }
     };
-
+    // Thay đổi trạng thái ship
     const handleChangeShip = (e) => {
         let val = e.target.value;
         if (val == 1) {
@@ -122,39 +139,162 @@ const AddProducts = () => {
             setShowFeeship(true);
         }
     };
-
-    // LẤY DANH MỤC SẢN PHẨM
-    const getDataCategory = useCallback(async () => {
+    // Hàm lấy dữ liệu sản phẩm
+    const fetchProductData = useCallback(async () => {
         setLoading(true);
-        try {
-            const response = await CategoryService.getDataCategory({});
+        setApiStates({
+            productLoaded: false,
+            brandLoaded: false,
+            categoryLoaded: false
+        });
 
-            if (response?.result && response.data?.category) {
-                const categoryData = response.data.category;
-                setCategory(categoryData);
-            } else {
-                throw new Error(response?.message || 'category data not found');
+        try {
+            // Gọi API lấy sản phẩm
+            const response = await ProductService.getProductById(id);
+            if (!response?.result) {
+                throw new Error(response?.message || 'Failed to fetch product');
             }
+
+            const productData = response.data.product;
+            setProducts(productData);
+            setShowMileage(productData.product_newold !== 1);
+            setShowFeeship(productData.product_ship !== 1);
+            setVariant(productData.product_variants);
+            // Lấy file ảnh cũ
+            let product_images = productData.product_images ? productData.product_images.split(',') : [];
+            let product_images_full = productData.product_images_full ? productData.product_images_full.split(',') : [];
+
+            const newFileOlds = product_images.map((image, index) => ({
+                type: 'image',
+                file: image,
+                file_full: product_images_full[index] || null
+            }));
+            setFileOlds(newFileOlds);
+
+            // set trạng thái productLoaded cho api
+            setApiStates(prev => ({ ...prev, productLoaded: true }));
+
+            // Gọi song song 2 API phụ
+            const promises = [];
+            if (productData.product_brand) {
+                promises.push(
+                    ModelProductService.getDataModelProductByID(productData.product_brand).then(res => {
+                        if (res?.result) {
+                            setModelProduct(res.data.modelProduct);
+                        }
+                        setApiStates(prev => ({ ...prev, brandLoaded: true }));
+                    })
+                );
+            } else {
+                setApiStates(prev => ({ ...prev, brandLoaded: true }));
+            }
+
+            if (productData.category) {
+                promises.push(
+                    CategoryService.getDataCategoryByID(productData.category).then(res => {
+                        if (res?.result) {
+                            setCategoryDetail(res.data.category);
+                        }
+                        setApiStates(prev => ({ ...prev, categoryLoaded: true }));
+                    })
+                );
+            } else {
+                setApiStates(prev => ({ ...prev, categoryLoaded: true }));
+            }
+
+            await Promise.all(promises);
+
         } catch (error) {
-            console.error("Fetch category error:", error);
-            reset();
-            setError('root', { type: 'server', message: error.message || 'Lỗi khi lấy dữ liệu danh mục' });
+            console.error('Fetch error:', error);
+            setError('root', { type: 'server', message: error.message });
         } finally {
             setLoading(false);
         }
-    }, [reset, setError, setLoading]);
+    }, [id, setError, setLoading, setVariant]);
 
+    // Hàm lấy danh sách danh mục
+    const fetchCategories = useCallback(async () => {
+        setLoading(true);
+        try {
+            const response = await CategoryService.getDataCategory({});
+            if (response?.result) {
+                setCategory(response.data.category);
+            } else {
+                throw new Error(response?.message || 'No category data found');
+            }
+        } catch (error) {
+            console.error('Category fetch error:', error);
+            setError('root', {
+                type: 'server',
+                message: error.message || 'Failed to load getCategory'
+            });
+        } finally {
+            setLoading(false);
+        }
+    }, [setCategory, setError, setLoading]);
+    // Effect chính để load dữ liệu
     useEffect(() => {
-        getDataCategory();
-    }, [getDataCategory]);
+        const loadData = async () => {
+            const productDataPromise = fetchProductData();
+            const categoriesDataPromise = fetchCategories();
+            // Chạy cả hai hàm song song
+            await Promise.all([productDataPromise, categoriesDataPromise]);
+        }
+        loadData();
+    }, [fetchProductData, fetchCategories]);
+    // Hàm Cập nhật các giá trị trong form
+    const setProductFormValues = useCallback((productData) => {
+        const formValues = {
+            product_code: productData.product_code,
+            product_name: productData.product_name,
+            product_description: productData.product_description,
+            product_brand: productData.product_brand,
+            product_model: productData.product_model,
+            product_year: productData.product_year,
+            product_fuel_type: productData.product_fuel_type,
+            product_transmission: productData.product_transmission,
+            product_horsepower: productData.product_horsepower,
+            product_engine_capacity: productData.product_engine_capacity,
+            product_torque: productData.product_torque,
+            product_drive_type: productData.product_drive_type,
+            product_body_type: productData.product_body_type,
+            product_seats: productData.product_seats,
+            product_doors: productData.product_doors,
+            product_airbags: productData.product_airbags,
+            product_safety_features: productData.product_safety_features,
+            product_infotainment: productData.product_infotainment,
+            product_parking_assist: String(productData.product_parking_assist),
+            product_cruise_control: String(productData.product_cruise_control),
+            product_newold: String(productData.product_newold),
+            product_ship: String(productData.product_ship),
+            product_mileage: productData.product_mileage,
+            product_feeship: productData.product_feeship,
+            category: productData.category,
+            category_code: productData.category_code,
+        };
 
+        Object.entries(formValues).forEach(([key, value]) => {
+            setValue(key, value);
+        });
+    }, [setValue]);
+    // Effect để xử lý khi tất cả API hoàn thành
+    useEffect(() => {
+        if (apiStates.productLoaded && apiStates.brandLoaded && apiStates.categoryLoaded) {
+            const formData = {
+                ...products,
+                modelProduct: getModelProduct,
+                categoryDetail: getCategoryDetail
+            };
+            // console.log('All data ready, setting form:', formData);
+            setProductFormValues(formData);
+        }
+    }, [id, apiStates]);
     // SET DANH MỤC CON THEO DANH MỤC CHA
     const handleChangeCategory = async (e) => {
         const val = e.target.value;
         if (val == 0) {
             return setCategoryDetail([]);
         }
-
         if (val) {
             setLoading(true);
             try {
@@ -176,33 +316,50 @@ const AddProducts = () => {
             }
         }
     }
-
-    // LẤY HÃNG SẢN PHẨM
+    // ===============LẤY HÃNG SẢN PHẨM===========
     const getDataBrands = useCallback(async () => {
         setLoading(true);
         try {
             const response = await BrandService.getDataBrand({});
 
             if (response?.result && response.data?.brand) {
-                const brandData = response.data.brand;
-                setBrand(brandData);
+                setBrand(response.data.brand);
             } else {
-                throw new Error(response?.message || 'không tìm thấy dữ liệu hãng sản phẩm');
+                setError('root', {
+                    type: 'server',
+                    message: response?.message || 'Không tìm thấy dữ liệu hãng sản phẩm'
+                });
             }
         } catch (error) {
             console.error("Fetch brands error:", error);
-            reset();
-            setError('root', { type: 'server', message: error.message || 'Lỗi khi lấy dữ liệu danh mục' });
+            setError('root', {
+                type: 'server',
+                message: error.message || 'Lỗi khi lấy dữ liệu danh mục'
+            });
         } finally {
             setLoading(false);
         }
-    }, [reset, setError, setLoading]);
-
+    }, [setBrand, setLoading, setError]);
+    // load dữ liệu
     useEffect(() => {
-        getDataBrands();
-    }, [getDataBrands]);
+        let isMounted = true;
+        const fetchData = async () => {
+            try {
+                await getDataBrands();
+            } catch (error) {
+                if (isMounted) {
+                    console.error("Error in useEffect:", error);
+                }
+            }
+        };
 
-    // LẤY DÒNG SẢN PHẨM
+        fetchData();
+        return () => {
+            isMounted = false;
+        };
+    }, [getDataBrands]);
+    
+    //========== SỰ KIỆN LẤY DÒNG SẢN PHẨM THEO ID HÃNG ==============
     const handleChangeModelProduct = async (e) => {
         const val = e.target.value;
         if (val == 0) {
@@ -231,9 +388,9 @@ const AddProducts = () => {
         }
     }
 
-    // LUỒNG LOAD VIDEO
+    // ===================LUỒNG LOAD VIDEO==============================
+    // Load video
     const loadVideo = (e) => {
-        showLoading();
         const fileInput = e.target.files[0];
         if (!fileInput) return;
 
@@ -277,8 +434,23 @@ const AddProducts = () => {
         } else {
             alert(`${name} sai định dạng, vui lòng chọn ảnh hoặc video hợp lệ!`);
         }
-        hideLoading();
     }
+    // Xóa file cũ trong sate
+    const icon_delete_img_old = (index, file, fileType) => {
+        // ========Thêm file vào mảng file cần xóa=========
+        setFileDels(prev => [...prev, {
+            file: file,
+            type: fileType
+        }]);
+        // ======Xóa file ở mảng file cũ tương ứng========
+        // Sao chép mảng cũ để tránh thay đổi trực tiếp state
+        let newFilesOld = [...fileOlds];
+        // Xóa phần tử tại vị trí index
+        newFilesOld.splice(index, 1);
+        // Cập nhật lại state
+        setFileOlds(newFilesOld);
+    };
+    // Xóa file trong sate
     const icon_delete_img = (index) => {
         // Sao chép mảng cũ để tránh thay đổi trực tiếp state
         let newFiles = [...files];
@@ -288,7 +460,7 @@ const AddProducts = () => {
         setFiles(newFiles);
     }
 
-    // Luồng lưu loại sản phẩm
+    // =======Luồng lưu loại sản phẩm=========
     const handleSaveProductType = (e) => {
         let parent = e.target.closest('.boxVariant');
 
@@ -320,12 +492,12 @@ const AddProducts = () => {
         parent.querySelector('input[id="product_stock"]').value = "";
         parent.querySelector('input[id="product_price"]').value = "";
     };
+    // Hàm change loại sản phẩm
     const handleChange = (index, field, value) => {
         const updatedVariants = [...variants];
         updatedVariants[index][field] = value;
         setVariant(updatedVariants);
     };
-
     // Hàm xóa một loại sản phẩm
     const handleDeleteVariant = (index) => {
         // Sao chép mảng cũ để tránh thay đổi trực tiếp state
@@ -809,7 +981,6 @@ const AddProducts = () => {
                         <div className='frameVariant'>
                             <div className="form-group">
                                 <label>Màu sắc <span className='cl_red'>*</span></label>
-                                {/* {...register('product_color')} */}
                                 <select id='product_color'>
                                     {functions.dataColor.map((item, index) => (
                                         <option key={index} value={item}>
@@ -821,12 +992,10 @@ const AddProducts = () => {
                             <div className="form-row">
                                 <div className="form-group">
                                     <label>Số lượng kho <span className='cl_red'>*</span></label>
-                                    {/* {...register('product_stock')} */}
                                     <input min={1} placeholder='Nhập số lượng kho' type="number" id='product_stock' />
                                 </div>
                                 <div className="form-group">
                                     <label>Giá sản phẩm <span className='cl_red'>*</span></label>
-                                    {/* {...register('product_price')} */}
                                     <input min={1} placeholder='Nhập giá sản phẩm' type="text" id='product_price' />
                                 </div>
                             </div>
@@ -907,11 +1076,21 @@ const AddProducts = () => {
                                 </p>
                                 <input type="file" id="product_images" hidden name="product_images" onChange={loadVideo} placeholder="Tải lên video" />
                             </label>
-                            {files.length > 0 && (
+                            {(files.length > 0 || fileOlds.length > 0) && (
                                 <div className="list_imgvideo">
                                     <div className="box_listimgvideo">
                                         <div className="frame_imgvideo">
-                                            {files.map((fileData, index) => (
+                                            {fileOlds.length > 0 && fileOlds.map((fileDataOld, index) => (
+                                                <div key={index} className="box_img_video" data-file-old={fileDataOld.file} data-video={fileDataOld.type === 'video' ? '1' : '0'} data-img={fileDataOld.type === 'image' ? '1' : '0'}>
+                                                    {fileDataOld.type === 'video' ? (
+                                                        <video src={fileDataOld.file_full} controls className="imgvideo_preview" />
+                                                    ) : (
+                                                        <img src={fileDataOld.file_full} className="imgvideo_preview" />
+                                                    )}
+                                                    <img src="/src/assets/images/admin/xoaanh.svg" className="icon_delete" onClick={() => icon_delete_img_old(index, fileDataOld.file, fileDataOld.type)} alt="delete" />
+                                                </div>
+                                            ))}
+                                            {files.length > 0 && files.map((fileData, index) => (
                                                 <div key={index} className="box_img_video" data-video={fileData.type === 'video' ? '1' : '0'} data-img={fileData.type === 'image' ? '1' : '0'}>
                                                     {fileData.type === 'video' ? (
                                                         <video src={URL.createObjectURL(fileData.file)} controls className="imgvideo_preview" />
@@ -986,4 +1165,4 @@ const AddProducts = () => {
     );
 };
 
-export default AddProducts;
+export default EditProducts;

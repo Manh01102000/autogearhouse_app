@@ -7,6 +7,7 @@ import Dashboard from "../../pages/admin/Dashboard";
 // PRODUCT
 import ManageProducts from "../../pages/admin/Product/ManageProducts";
 import AddProducts from "../../pages/admin/Product/AddProducts";
+import EditProducts from "../../pages/admin/Product/EditProducts";
 // USER
 import UserLists from "../../pages/admin/User/UserList";
 import AdminLists from "../../pages/admin/User/AdminList";
@@ -16,21 +17,36 @@ import EditUser from "../../pages/admin/User/EditUser";
 //404
 import NotFound from "../../pages/NotFound";
 // Cấu hình
+// Cấu hình kiểm tra quyền đăng nhập
+import ProtectedRoute from '../../components/ProtectedRoute';
+
 
 const AppRouter = () => {
     return (
         <Routes>
+            {/* Public route */}
             <Route path="login" element={<LoginAdmin />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            {/* PRODUCT */}
-            <Route path="product-list" element={<ManageProducts />} />
-            <Route path="add-products" element={<AddProducts />} />
-            {/* USER */}
-            <Route path="add-user" element={<AddUser />} />
-            <Route path="edit-admin/:id" element={<EditUser />} />
-            <Route path="users" element={<UserLists />} />
-            <Route path="admins" element={<AdminLists />} />
-            <Route path="business" element={<BusinessLists />} />
+
+            {/* Nhóm các route cần bảo vệ chung */}
+            <Route element={<ProtectedRoute />}>
+                <Route path="dashboard" element={<Dashboard />} />
+
+                {/* PRODUCT */}
+                <Route path="product-list" element={<ManageProducts />} />
+                <Route path="add-products" element={<AddProducts />} />
+                <Route path="edit-products/:id" element={<EditProducts />} />
+
+                {/* USER */}
+                <Route element={<ProtectedRoute adminOnly />}>
+                    <Route path="add-user" element={<AddUser />} />
+                    <Route path="edit-user/:id" element={<EditUser />} />
+                    <Route path="admins" element={<AdminLists />} />
+                </Route>
+
+                <Route path="users" element={<UserLists />} />
+                <Route path="business" element={<BusinessLists />} />
+            </Route>
+
             {/* 404 */}
             <Route path="*" element={<NotFound />} />
         </Routes>

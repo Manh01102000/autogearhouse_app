@@ -4,18 +4,22 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // Import router
 import AppRouter from "../routes/AppRouter";
 import AdminRouter from "../routes/AdminRouter";
+// Check đăng nhập
+import { AuthProvider } from "../../contexts/AuthContext";
 
 const App = () => {
     return (
-        <Router>
-            <Routes>
-                {/* Routes cho User */}
-                <Route path="/*" element={<AppRouter />} />
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    {/* Routes cho User */}
+                    <Route path="/*" element={<AppRouter />} />
 
-                {/* Routes cho Admin */}
-                <Route path="/admin/*" element={<AdminRouter />} />
-            </Routes>
-        </Router>
+                    {/* Routes cho Admin */}
+                    <Route path="/admin/*" element={<AdminRouter />} />
+                </Routes>
+            </Router>
+        </AuthProvider>
     );
 };
 

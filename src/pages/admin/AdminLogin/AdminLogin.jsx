@@ -15,8 +15,13 @@ import eyeOpnedIcon from "../../../assets/images/admin/eyes-opend.png";
 import * as UserService from "../../../services/UserService";
 // Import useNavigate
 import { useNavigate } from 'react-router-dom';
+// authContext
+import { useAuth } from '../../../contexts/AuthContext';
 
 const AdminLogin = () => {
+    // Khai báo hook từ useAuth
+    const { login } = useAuth();
+
     // Hook sử dụng để điều hướng người dùng sau khi đăng nhập thành công
     const navigate = useNavigate();
 
@@ -33,23 +38,12 @@ const AdminLogin = () => {
     const onSubmit = async (data) => {
         showLoading();
         try {
-            const response = await UserService.LoginUser(data.username, data.password);
-            if (!response) {
-                throw new Error("Không nhận được phản hồi từ server.");
-            }
-            if (response.result) {
-                alert(response.result);
-                const { token, user: { user_id } } = response.data;
-                // Lưu token vào localStorage (cân nhắc sử dụng HttpOnly cookies để bảo mật hơn)
-                localStorage.setItem('token', token);
-                navigate('/admin/dashboard');
-            } else {
-                alert(response.message || "Đăng nhập thất bại.");
-            }
+            // Gọi API Login
+            await login(data.username, data.password);
+            navigate('/admin/dashboard');
         } catch (error) {
+            alert(error.message);
             console.error("Lỗi đăng nhập:", error);
-            // Thông báo chi tiết lỗi khi xảy ra ngoại lệ
-            alert(error.message || "Đăng nhập thất bại. Vui lòng thử lại.");
         } finally {
             hideLoading();
         }

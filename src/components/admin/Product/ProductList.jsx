@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { FiEdit, FiTrash2, FiPlus, FiSearch } from 'react-icons/fi';
 import nodata from "../../../assets/images/admin/nodata.jpg";
 
-const AdminProductList = ({ products, onDelete, onEdit, onCreate }) => {
+const AdminProductList = ({ products, getCategory, onDelete }) => {
     const [searchTerm, setSearchTerm] = useState('');
     let productData = products.data || [];
     let productTotal = products.total || 0;
-
     return (
         <div className="admin-product-dashboard">
             <div className="admin-header">
@@ -14,16 +13,9 @@ const AdminProductList = ({ products, onDelete, onEdit, onCreate }) => {
                 <div className="admin-actions">
                     <div className="search-box">
                         <FiSearch className="search-icon" />
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm sản phẩm..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
+                        <input type="text" placeholder="Tìm kiếm sản phẩm..." value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)} />
                     </div>
-                    <button className="add-product-btn" onClick={onCreate}>
-                        <FiPlus /> Thêm mới
-                    </button>
                 </div>
             </div>
 
@@ -33,9 +25,9 @@ const AdminProductList = ({ products, onDelete, onEdit, onCreate }) => {
                         <tr>
                             <th className="text-center" style={{ width: '60px' }}>ID</th>
                             <th>Tên sản phẩm</th>
+                            <th>Mã sản phẩm</th>
                             <th>Danh mục</th>
-                            <th className="text-center">Giá</th>
-                            <th className="text-center">Tồn kho</th>
+                            <th>Danh mục chi tiết</th>
                             <th className="text-center">Trạng thái</th>
                             <th className="text-center" style={{ width: '100px' }}>Hành động</th>
                         </tr>
@@ -47,36 +39,30 @@ const AdminProductList = ({ products, onDelete, onEdit, onCreate }) => {
                                     <td className="text-center">{index + 1}</td>
                                     <td>
                                         <div className="product-info-cell">
-                                            <img
-                                                src={product.product_images_full?.split(',')[0] || 'https://via.placeholder.com/40'}
-                                                alt={product.product_name}
-                                                className="product-thumb"
-                                            />
+                                            <img src={product.product_images_full?.split(',')[0] || 'https://via.placeholder.com/40'} alt={product.product_name} className="product-thumb" />
                                             <span className="product-name">{product.product_name}</span>
                                         </div>
                                     </td>
-                                    <td>{product.category_code}</td>
-                                    <td className="text-center"></td>
-                                    <td className="text-center"></td>
+                                    <td>{product.product_code}</td>
+                                    <td>
+                                        {getCategory.find(cat => cat.cat_id === product.category)?.cat_name || 'Không xác định'}
+                                    </td>
+                                    <td>
+                                        {getCategory.find(cat => cat.cat_id === product.category_code)?.cat_name || 'Không xác định'}
+                                    </td>
                                     <td className="text-center">
                                         <span className={`status-label ${product.status}`}>
-                                            {product.product_active === '1' ? 'Kích hoạt' : 'Ẩn'}
+                                            {product.product_active == '1' ? 'Kích hoạt' : 'Ẩn'}
                                         </span>
                                     </td>
                                     <td className="text-center">
                                         <div className="action-buttons">
-                                            <button
-                                                className="edit-action"
-                                                onClick={() => onEdit(product.product_id)}
-                                                title="Chỉnh sửa"
-                                            >
-                                                <FiEdit />
-                                            </button>
-                                            <button
-                                                className="delete-action"
-                                                onClick={() => onDelete(product.product_id)}
-                                                title="Xóa"
-                                            >
+                                            <a href={`edit-products/${product.product_id}`}>
+                                                <button className="edit-action" title="Chỉnh sửa" >
+                                                    <FiEdit />
+                                                </button>
+                                            </a>
+                                            <button className="delete-action" onClick={() => onDelete(product.product_id)} title="Xóa">
                                                 <FiTrash2 />
                                             </button>
                                         </div>

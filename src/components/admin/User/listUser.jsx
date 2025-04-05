@@ -58,7 +58,7 @@ const ListUser = ({ users, handleEdit, handleDelete }) => {
                                         <td>{functions.Ejsdate('H:i:s d/m/Y', user.customer_create_time)}</td>
                                         <td>
                                             <div className="action-buttons">
-                                                <a href={`edit-admin/${user.user_id}`}>
+                                                <a href={`edit-user/${user.user_id}`}>
                                                     <button
                                                         className="edit-btn"
                                                         title="Chỉnh sửa">

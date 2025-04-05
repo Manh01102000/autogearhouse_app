@@ -5,6 +5,11 @@ const getDataCategory = async (data) => {
     return response;
 }
 
+const getDataCategoryAll = async (data) => {
+    const response = await callApi("GET", '/api/category/all', data, 'json');
+    return response;
+}
+
 const getDataCategoryByID = async (id) => {
     const response = await callApi("GET", `/api/category/${id}`, {}, 'json');
     return response;
@@ -12,5 +17,6 @@ const getDataCategoryByID = async (id) => {
 
 export {
     getDataCategory,
-    getDataCategoryByID
+    getDataCategoryAll,
+    getDataCategoryByID,
 }

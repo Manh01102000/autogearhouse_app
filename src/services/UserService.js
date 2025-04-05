@@ -39,11 +39,23 @@ const getUserByID = async (id) => {
     return response;
 }
 
+const verifyToken = async (headers) => {
+    const response = await callApi("POST", `/api/user/checkToken`, {}, 'form-data', headers);
+    return response;
+}
+
+const refreshToken = async (headers) => {
+    const response = await callApi("GET", `/api/user/refresh`, {}, 'form-data', headers);
+    return response;
+}
+
 export {
     createUser,
     LoginUser,
     getUser,
     getUserAdmin,
     getUserByID,
-    updateUser
+    updateUser,
+    verifyToken,
+    refreshToken
 }
