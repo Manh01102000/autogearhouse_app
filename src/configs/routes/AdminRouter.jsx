@@ -14,6 +14,8 @@ import AdminLists from "../../pages/admin/User/AdminList";
 import BusinessLists from "../../pages/admin/User/BusinessList";
 import AddUser from "../../pages/admin/User/AddUser";
 import EditUser from "../../pages/admin/User/EditUser";
+//SETTING ACCOUNT
+import AccountSettings from "../../pages/admin/Settings/AccountSettings";
 //404
 import NotFound from "../../pages/NotFound";
 // Cấu hình
@@ -41,6 +43,10 @@ const AppRouter = () => {
                     <Route path="add-user" element={<AddUser />} />
                     <Route path="edit-user/:id" element={<EditUser />} />
                     <Route path="admins" element={<AdminLists />} />
+                </Route>
+                {/* SETTING */}
+                <Route element={<ProtectedRoute adminOnly />}>
+                    <Route path="settings" element={<AccountSettings />} />
                 </Route>
 
                 <Route path="users" element={<UserLists />} />

@@ -25,9 +25,9 @@ const createUser = async (data) => {
     return response;
 }
 
-const updateUser = async (data) => {
+const updateUser = async (id, data, headers) => {
     try {
-        return await callApi("PUT", `/api/user/${data.id}`, data, "form-data");
+        return await callApi("PUT", `/api/user/${id}`, data, "form-data", headers);
     } catch (error) {
         console.error("Update error:", error);
         throw error;

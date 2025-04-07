@@ -33,9 +33,12 @@ export function AuthProvider({ children }) {
 
                     // Gọi API verifyToken để xác thực token
                     const userData = await UserService.verifyToken(headers);
-
-                    // Nếu thành công, lưu thông tin user vào state
-                    setUser(userData);
+                    if (userData.data) {
+                        // Nếu thành công, lưu thông tin user vào state
+                        setUser(userData.data);
+                    } else {
+                        setUser(null);
+                    }
                 } catch (error) {
                     // Nếu token không hợp lệ hoặc có lỗi → xóa token
                     localStorage.removeItem('token');
@@ -88,7 +91,7 @@ export function AuthProvider({ children }) {
 
             // Lưu token vào localStorage
             localStorage.setItem('token', token);
-
+            console.log(user);
             // Lưu user vào state
             setUser(user);
 
@@ -105,7 +108,7 @@ export function AuthProvider({ children }) {
         localStorage.removeItem('token'); // Xóa token
         setUser(null); // Reset user
     };
-
+    // console.log(user);
     // Trả về Provider để bọc quanh App, truyền các giá trị user, loading, login, logout cho toàn bộ app
     return (
         <AuthContext.Provider value={{ user, loading, login, logout }}>

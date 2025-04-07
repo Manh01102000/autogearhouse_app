@@ -16,10 +16,10 @@ const ProtectedRoute = ({ adminOnly = false }) => {
 
     // Nếu không có user (nghĩa là chưa đăng nhập) → chuyển hướng sang trang đăng nhập admin
     if (!user) return <Navigate to="/admin/login" replace />;
-
+    // console.log(user);
     // Nếu route yêu cầu quyền admin nhưng user hiện tại không phải admin (role = '2')
     // → chuyển hướng về trang chủ (ngăn user thường truy cập vào route dành cho admin)
-    if (adminOnly && user.user_role == '2') {
+    if (adminOnly && user.user_role != '2') {
         return <Navigate to="/" replace />;
     }
 

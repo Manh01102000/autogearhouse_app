@@ -23,15 +23,13 @@ const EditUser = () => {
         setLoading(true);
         try {
             const response = await UserService.getUserByID(id);
-            console.log("API Response:", response);
+            // console.log("API Response:", response);
 
             if (response?.result && response.data?.user) {
                 const userData = response.data.user;
                 setUser(userData);
-
                 setValue('emp_account', userData?.user_email_account || '');
                 setValue('user_role', userData?.user_role ?? '');
-
                 if (userData.user_role === 1 && userData.customers?.length > 0) {
                     const customer = userData.customers[0];
                     setValue('emp_name', customer?.customer_name || '');
@@ -72,9 +70,25 @@ const EditUser = () => {
     const onSubmit = async (data) => {
         try {
             data.emp_birth = String(functions.convertToTimestamp(data.emp_birth));
-            data.id = id; // Thêm id vào data
             // Gọi API
-            const response = await UserService.updateUser(data);
+            const formData = new FormData();
+            // Append các field dữ liệu
+            Object.keys(data).forEach((item, index) => {
+                if (data[item] !== undefined && data[item] !== null) {
+                    if (typeof data[item] === 'object') {
+                        formData.append(item, JSON.stringify(data[item]));
+                    } else {
+                        formData.append(item, data[item]);
+                    }
+                }
+            });
+            // Lấy token
+            const token = localStorage.getItem('token');
+            // Tạo headers
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+            };
+            const response = await UserService.updateUser(id, formData, headers);
             if (response?.result) {
                 alert(response.message);
             } else {

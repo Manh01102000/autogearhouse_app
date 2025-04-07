@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import {
-    FaBars, FaTachometerAlt, FaUser,
+import { FaBars, FaTachometerAlt, FaUser,
     FaCog, FaSignOutAlt, FaBox,
     FaClipboardList, FaChevronDown, FaChevronRight
 } from 'react-icons/fa';
 import { DiGithubBadge } from "react-icons/di";
 import './SidebarAdmin.scss';
+import { Link } from 'react-router-dom';
 
 const SidebarAdmin = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -83,10 +83,10 @@ const SidebarAdmin = () => {
                             onMouseEnter={() => setHoveredItem(item.id)}
                             onMouseLeave={() => setHoveredItem(null)}>
                             {item.link ? (
-                                <a href={item.link} className="menu-link">
+                                <Link to={item.link} className="menu-link">
                                     <span className="menu-icon">{item.icon}</span>
                                     {!collapsed && <span className="menu-label">{item.label}</span>}
-                                </a>
+                                </Link>
                             ) : (
                                 <div className="menu-link" onClick={() => toggleMenu(item.id)}>
                                     <span className="menu-icon">{item.icon}</span>
@@ -105,9 +105,9 @@ const SidebarAdmin = () => {
                                 <ul className="submenu">
                                     {item.subItems.map((subItem, index) => (
                                         <li key={index}>
-                                            <a href={subItem.link} className="submenu-link">
+                                            <Link to={subItem.link} className="submenu-link">
                                                 {subItem.label}
-                                            </a>
+                                            </Link>
                                         </li>
                                     ))}
                                 </ul>
@@ -119,7 +119,7 @@ const SidebarAdmin = () => {
                                     <ul>
                                         {item.subItems.map((subItem, index) => (
                                             <li key={index}>
-                                                <a href={subItem.link}>{subItem.label}</a>
+                                                <Link to={subItem.link}>{subItem.label}</Link>
                                             </li>
                                         ))}
                                     </ul>
