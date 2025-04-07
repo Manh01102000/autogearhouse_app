@@ -1,5 +1,6 @@
 import { FiEdit, FiTrash2, FiSearch, FiUser } from 'react-icons/fi';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 // import function
 import * as functions from "../../../utils/function";
 // 
@@ -58,13 +59,13 @@ const ListUser = ({ users, handleEdit, handleDelete }) => {
                                         <td>{functions.Ejsdate('H:i:s d/m/Y', user.customer_create_time)}</td>
                                         <td>
                                             <div className="action-buttons">
-                                                <a href={`edit-user/${user.user_id}`}>
+                                                <Link to={`/admin/edit-user/${user.user_id}`}>
                                                     <button
                                                         className="edit-btn"
                                                         title="Chỉnh sửa">
                                                         <FiEdit />
                                                     </button>
-                                                </a>
+                                                </Link>
                                                 <button
                                                     className="delete-btn"
                                                     onClick={() => handleDelete(user.user_id)}

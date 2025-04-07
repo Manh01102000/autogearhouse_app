@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FiEdit, FiTrash2, FiPlus, FiSearch } from 'react-icons/fi';
 import nodata from "../../../assets/images/admin/nodata.jpg";
 
@@ -57,11 +58,11 @@ const AdminProductList = ({ products, getCategory, onDelete }) => {
                                     </td>
                                     <td className="text-center">
                                         <div className="action-buttons">
-                                            <a href={`edit-products/${product.product_id}`}>
+                                            <Link to={`/admin/edit-products/${product.product_id}`}>
                                                 <button className="edit-action" title="Chỉnh sửa" >
                                                     <FiEdit />
                                                 </button>
-                                            </a>
+                                            </Link>
                                             <button className="delete-action" onClick={() => onDelete(product.product_id)} title="Xóa">
                                                 <FiTrash2 />
                                             </button>

@@ -336,6 +336,8 @@ const AddProducts = () => {
         setVariant(newVariants);
     };
 
+    if (loading) return <p>Đang tải dữ liệu...</p>;
+
     return (
         <AdminLayout>
             <div className="admin-product-form">

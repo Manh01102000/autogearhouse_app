@@ -92,8 +92,7 @@ const ManageProducts = () => {
             <ProductList
                 products={products}
                 getCategory={getCategory}
-                onDelete={handleDelete}
-            />
+                onDelete={handleDelete} />
         </AdminLayout>
     );
 };

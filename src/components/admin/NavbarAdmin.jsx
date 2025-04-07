@@ -1,12 +1,24 @@
 // src/components/admin/NavbarAdmin.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FaBell, FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import './NavbarAdmin.scss';
+// Gọi đến authContext lấy dữ liệu user
+import { useAuth } from '../../contexts/AuthContext';
 
 const NavbarAdmin = () => {
     const [showNotifications, setShowNotifications] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
-
+    const [userData, setUserData] = useState([]);
+    // Lấy dữ liệu từ authContext
+    const { user, loading } = useAuth();
+    useEffect(() => {
+        if (user) {
+            setUserData(user);
+        }
+    }, [])
+    // kiểm tra dữ liệu
+    if (loading) return <p>Đang kiểm tra xác thực...</p>;
     // Dữ liệu thông báo mẫu
     const notifications = [
         { id: 1, title: 'Đơn hàng mới', message: 'Bạn có 5 đơn hàng mới cần xử lý', time: '10 phút trước' },
@@ -70,10 +82,12 @@ const NavbarAdmin = () => {
                                 </div>
                             </div>
                             <div className="dropdown-menu">
-                                <button className="dropdown-item">
-                                    <FaUserCircle className="item-icon" />
-                                    <span>Thông tin tài khoản</span>
-                                </button>
+                                <Link to={`/admin/edit-user/${userData.user_id}`}>
+                                    <button className="dropdown-item">
+                                        <FaUserCircle className="item-icon" />
+                                        <span>Thông tin tài khoản</span>
+                                    </button>
+                                </Link>
                                 <button className="dropdown-item">
                                     <FaCog className="item-icon" />
                                     <span>Cài đặt</span>
