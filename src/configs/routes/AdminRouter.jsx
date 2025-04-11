@@ -21,7 +21,7 @@ import AccountSettings from "../../pages/admin/Settings/AccountSettings";
 import NotFound from "../../pages/NotFound";
 // Cấu hình
 // Cấu hình kiểm tra quyền đăng nhập
-import ProtectedRoute from '../../components/ProtectedRoute';
+import ProtectedRoute from '../../components/admin/ProtectedRoute';
 
 
 const AppRouter = () => {
