@@ -5,11 +5,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AppRouter from "../routes/AppRouter";
 import AdminRouter from "../routes/AdminRouter";
 // Check đăng nhập
-import { AuthProvider } from "../../contexts/AuthContext";
+// Tạm thời bỏ thay bằng redux
+// import { AuthProvider } from "../../contexts/AuthContext";
 
 const App = () => {
     return (
-        <AuthProvider>
+        // <AuthProvider>
             <Router>
                 <Routes>
                     {/* Routes cho User */}
@@ -19,7 +20,7 @@ const App = () => {
                     <Route path="/admin/*" element={<AdminRouter />} />
                 </Routes>
             </Router>
-        </AuthProvider>
+        // </AuthProvider>
     );
 };
 

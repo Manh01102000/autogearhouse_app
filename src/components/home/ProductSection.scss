@@ -1,0 +1,35 @@
+.product-section {
+    padding: 40px 20px;
+
+    .section-title {
+        font-size: 24px;
+        font-weight: bold;
+        text-transform: uppercase;
+        max-width: 1200px;
+        margin: auto;
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .product-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    #loading {
+        position: unset;
+        padding-top: 50px;
+        background: unset;
+
+        .loading {
+            margin-top: 0;
+
+            .loading-circle {
+                background: #000;
+            }
+        }
+    }
+}

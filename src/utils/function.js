@@ -191,6 +191,18 @@ function convertToTimestamp(dateString) {
     return date.getTime() / 1000; // Trả về timestamp
 }
 
+function number_format(number, decimals = 0, dec_point = '.', thousands_sep = ',') {
+    if (isNaN(number) || number === null) return '';
+
+    const fixedNumber = Number(number).toFixed(decimals);
+
+    const parts = fixedNumber.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep);
+
+    return parts.join(dec_point);
+}
+
+
 const dataRole = [
     'Chọn vai trò',
     'khách hàng',
@@ -389,6 +401,7 @@ export {
     Ejsdate,
     Ejstime,
     convertToTimestamp,
+    number_format,
     dataRole,
     dataAdminPosition,
     dataAdminDepartment,
@@ -404,5 +417,6 @@ export {
     dataAirbags,
     dataSafetyFeatures,
     dataInfotainment,
-    dataColor
+    dataColor,
+
 }

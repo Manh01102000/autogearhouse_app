@@ -15,12 +15,15 @@ import eyeOpnedIcon from "../../../assets/images/admin/eyes-opend.png";
 import * as UserService from "../../../services/UserService";
 // Import useNavigate
 import { useNavigate } from 'react-router-dom';
-// authContext
-import { useAuth } from '../../../contexts/AuthContext';
+// authContext (đóng do dùng redux)
+// import { useAuth } from '../../../contexts/AuthContext';
+// REDUX
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../../redux/features/auth/authSlice';
 
 const AdminLogin = () => {
     // Khai báo hook từ useAuth
-    const { login } = useAuth();
+    // const { login } = useAuth();
 
     // Hook sử dụng để điều hướng người dùng sau khi đăng nhập thành công
     const navigate = useNavigate();
@@ -34,15 +37,20 @@ const AdminLogin = () => {
     // Hàm lấy loading context
     const { showLoading, hideLoading } = useLoading();
 
+    // REDUX
+    const dispatch = useDispatch();
+    const { loading, error } = useSelector((state) => state.auth);
+
     // Hàm xử lý đăng nhập khi form được submit
     const onSubmit = async (data) => {
         showLoading();
         try {
-            // Gọi API Login
-            await login(data.username, data.password);
+            // Gọi đến createAsyncThunk tên là login và gửi request đến UserService.LoginUser(email, password)
+            const result = await dispatch(login({ email: data.username, password: data.password })).unwrap();
+            // console.log(result);
             navigate('/admin/dashboard');
         } catch (error) {
-            alert(error.message);
+            alert(error);
             console.error("Lỗi đăng nhập:", error);
         } finally {
             hideLoading();

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FaBars, FaTachometerAlt, FaUser,
+import {
+    FaBars, FaTachometerAlt, FaUser,
     FaCog, FaSignOutAlt, FaBox,
     FaClipboardList, FaChevronDown, FaChevronRight
 } from 'react-icons/fa';
@@ -131,10 +132,12 @@ const SidebarAdmin = () => {
             </div>
 
             <div className="sidebar-footer">
-                <button className="logout-btn">
-                    <FaSignOutAlt size={20} />
-                    {!collapsed && <span>Đăng xuất</span>}
-                </button>
+                <Link to={"/admin/logout"}>
+                    <button className="logout-btn">
+                        <FaSignOutAlt size={20} />
+                        {!collapsed && <span>Đăng xuất</span>}
+                    </button>
+                </Link>
             </div>
         </div>
     );

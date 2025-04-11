@@ -1,0 +1,113 @@
+.product-card {
+    width: calc(100% / 4 - 15px);
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+
+    .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .product-image-hide {
+        display: none;
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    &:hover {
+        transition: all 0.8s ease;
+
+        .product-image {
+            display: none;
+        }
+
+        .product-image-hide {
+            display: block;
+            animation: fade-in 1s;
+        }
+    }
+
+
+    .product-info {
+        width: 100%;
+
+        .product-name {
+            margin-bottom: 8px;
+            padding-top: 10px;
+            padding-bottom: 7px;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #000;
+            border-bottom: 1px solid #f4f4f4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .product-price {
+            color: #e60023;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            padding: 0 5px;
+            text-align: center;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: center;
+            font-size: 14px;
+            color: #000;
+            width: 100%;
+            margin: 15px 0;
+            text-align: center;
+            padding: 0 5px;
+            gap: 10px;
+
+            .meta-item {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                gap: 5px;
+                padding: 0 9px;
+                text-align: center;
+                font-size: 13px;
+            }
+
+            .meta-item+.meta-item {
+                border-left: 1px solid #ddd;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .product-card {
+        width: calc(100% / 4 - 15px);
+    }
+}
+
+@media (max-width: 1023px) {
+    .product-card {
+        width: calc(100% / 3 - 14px);
+    }
+}
+
+@media (max-width: 600px) {
+    .product-card {
+        width: calc(100% / 2 - 14px);
+    }
+}
