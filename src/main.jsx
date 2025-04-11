@@ -3,6 +3,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from './App.jsx';
 import { HelmetProvider } from "react-helmet-async";
+import { Provider } from 'react-redux';
+import store from './redux/store.js';
 // Import thư viện React.
 // ReactDOM.createRoot giúp ứng dụng chạy với React 18 tối ưu hơn.
 // React.StrictMode giúp phát hiện các lỗi tiềm ẩn trong quá trình phát triển.
@@ -13,10 +15,12 @@ import "./assets/css/global.css"; // Import CSS toàn cục
 import { LoadingProvider } from "./contexts/LoadingContext";
 ReactDOM.createRoot(document.getElementById("root")).render(
     // <React.StrictMode>
+    <Provider store={store}>
         <HelmetProvider>
             <LoadingProvider>
                 <App />
             </LoadingProvider>
         </HelmetProvider>
+    </Provider>
     // </React.StrictMode>
 );

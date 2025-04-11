@@ -3,6 +3,7 @@
 import { Routes, Route } from "react-router-dom";
 // Import các trang chính của website.
 import LoginAdmin from "../../pages/admin/AdminLogin/AdminLogin";
+import LogoutAdmin from "../../pages/admin/AdminLogout";
 import Dashboard from "../../pages/admin/Dashboard";
 // PRODUCT
 import ManageProducts from "../../pages/admin/Product/ManageProducts";
@@ -28,6 +29,7 @@ const AppRouter = () => {
         <Routes>
             {/* Public route */}
             <Route path="login" element={<LoginAdmin />} />
+            <Route path="logout" element={<LogoutAdmin />} />
 
             {/* Nhóm các route cần bảo vệ chung */}
             <Route element={<ProtectedRoute />}>

@@ -125,7 +125,6 @@ const AddProducts = () => {
 
     // LẤY DANH MỤC SẢN PHẨM
     const getDataCategory = useCallback(async () => {
-        setLoading(true);
         try {
             const response = await CategoryService.getDataCategory({});
 
@@ -139,10 +138,8 @@ const AddProducts = () => {
             console.error("Fetch category error:", error);
             reset();
             setError('root', { type: 'server', message: error.message || 'Lỗi khi lấy dữ liệu danh mục' });
-        } finally {
-            setLoading(false);
         }
-    }, [reset, setError, setLoading]);
+    }, [reset, setError]);
 
     useEffect(() => {
         getDataCategory();
@@ -156,7 +153,6 @@ const AddProducts = () => {
         }
 
         if (val) {
-            setLoading(true);
             try {
                 const response = await CategoryService.getDataCategoryByID(val);
                 console.log("API Response:", response);
@@ -171,15 +167,12 @@ const AddProducts = () => {
                 console.error("Fetch category error:", error);
                 reset();
                 setError('root', { type: 'server', message: error.message || 'Lỗi khi lấy dữ liệu danh mục' });
-            } finally {
-                setLoading(false);
             }
         }
     }
 
     // LẤY HÃNG SẢN PHẨM
     const getDataBrands = useCallback(async () => {
-        setLoading(true);
         try {
             const response = await BrandService.getDataBrand({});
 
@@ -193,10 +186,8 @@ const AddProducts = () => {
             console.error("Fetch brands error:", error);
             reset();
             setError('root', { type: 'server', message: error.message || 'Lỗi khi lấy dữ liệu danh mục' });
-        } finally {
-            setLoading(false);
         }
-    }, [reset, setError, setLoading]);
+    }, [reset, setError]);
 
     useEffect(() => {
         getDataBrands();
@@ -210,7 +201,6 @@ const AddProducts = () => {
         }
 
         if (val) {
-            setLoading(true);
             try {
                 const response = await ModelProductService.getDataModelProductByID(val);
                 // console.log("API Response:", response);
@@ -225,8 +215,6 @@ const AddProducts = () => {
                 console.error("Fetch category error:", error);
                 reset();
                 setError('root', { type: 'server', message: error.message || 'Lỗi khi lấy dữ liệu danh mục' });
-            } finally {
-                setLoading(false);
             }
         }
     }
@@ -335,9 +323,7 @@ const AddProducts = () => {
         // Cập nhật lại state
         setVariant(newVariants);
     };
-
-    if (loading) return <p>Đang tải dữ liệu...</p>;
-
+    
     return (
         <AdminLayout>
             <div className="admin-product-form">

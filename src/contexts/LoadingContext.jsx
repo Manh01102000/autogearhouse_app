@@ -1,10 +1,10 @@
 import { createContext, useContext, useState } from "react";
 import LoadingComponent from "../components/Loading"; // Import component Loading
 
-// 1️⃣ Tạo Context
+// Tạo Context
 const LoadingContext = createContext(null);
 
-// 2️⃣ Hook để sử dụng trong component
+// Hook để sử dụng trong component
 export const useLoading = () => {
     const context = useContext(LoadingContext);
     if (!context) {
@@ -13,7 +13,7 @@ export const useLoading = () => {
     return context;
 };
 
-// 3️⃣ Provider
+// Provider
 export const LoadingProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
 

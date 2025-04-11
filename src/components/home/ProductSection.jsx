@@ -1,15 +1,29 @@
-const ProductSection = () => {
-    return (
-      <section className="products">
-        <h2>Sản phẩm nổi bật</h2>
-        <div className="product-list">
-          <div className="product-card">Sản phẩm 1</div>
-          <div className="product-card">Sản phẩm 2</div>
-          <div className="product-card">Sản phẩm 3</div>
+// components/home/ProductSection.jsx
+import React from 'react';
+import ProductCard from '../../components/home/ProductCard';
+import './ProductSection.scss';
+
+const ProductSection = ({ dataH2, loading, dataProducts = [] }) => {
+  return (
+    <section className="product-section">
+      <h2 className="section-title">{dataH2}</h2>
+      {loading && <div id="loading" style={{ display: loading ? "block" : "none" }}>
+        <div className="loading">
+          <span className="loading-circle"></span>
+          <span className="loading-circle"></span>
+          <span className="loading-circle"></span>
+          <span className="loading-circle-shadow"></span>
+          <span className="loading-circle-shadow"></span>
+          <span className="loading-circle-shadow"></span>
         </div>
-      </section>
-    );
-  };
-  
-  export default ProductSection;
-  
+      </div>}
+      <div className="product-list">
+        {dataProducts.map((product, index) => (
+          <ProductCard key={index} product={product} />
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default ProductSection;

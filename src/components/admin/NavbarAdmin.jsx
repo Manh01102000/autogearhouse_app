@@ -3,22 +3,24 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBell, FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import './NavbarAdmin.scss';
-// Gọi đến authContext lấy dữ liệu user
-import { useAuth } from '../../contexts/AuthContext';
+// Gọi đến authContext lấy dữ liệu user (đóng do dùng redux)
+// import { useAuth } from '../../contexts/AuthContext';
+import { useSelector } from 'react-redux';
 
 const NavbarAdmin = () => {
     const [showNotifications, setShowNotifications] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [userData, setUserData] = useState([]);
     // Lấy dữ liệu từ authContext
-    const { user, loading } = useAuth();
+    // const { user, loading } = useAuth();
+    //Redux
+    const { user } = useSelector((state) => state.auth);
     useEffect(() => {
         if (user) {
             setUserData(user);
         }
-    }, [])
-    // kiểm tra dữ liệu
-    if (loading) return <p>Đang kiểm tra xác thực...</p>;
+    }, []);
+
     // Dữ liệu thông báo mẫu
     const notifications = [
         { id: 1, title: 'Đơn hàng mới', message: 'Bạn có 5 đơn hàng mới cần xử lý', time: '10 phút trước' },
@@ -77,7 +79,7 @@ const NavbarAdmin = () => {
                         <div className="user-dropdown">
                             <div className="dropdown-header">
                                 <div className="user-info">
-                                    <span className="user-name">John Doe</span>
+                                    <span className="user-name">{user.user_name}</span>
                                     <span className="user-role">Quản trị viên</span>
                                 </div>
                             </div>
@@ -93,10 +95,12 @@ const NavbarAdmin = () => {
                                     <span>Cài đặt</span>
                                 </button>
                                 <div className="dropdown-divider"></div>
-                                <button className="dropdown-item logout">
-                                    <FaSignOutAlt className="item-icon" />
-                                    <span>Đăng xuất</span>
-                                </button>
+                                <Link to={"/admin/logout"}>
+                                    <button className="dropdown-item logout">
+                                        <FaSignOutAlt className="item-icon" />
+                                        <span>Đăng xuất</span>
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     )}
