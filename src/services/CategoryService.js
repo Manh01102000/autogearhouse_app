@@ -15,8 +15,15 @@ const getDataCategoryByID = async (id) => {
     return response;
 }
 
+
+const getDataCategoryTree = async () => {
+    const response = await callApi("GET", `/api/category/tree`, {}, 'json');
+    return response;
+}
+
 export {
     getDataCategory,
     getDataCategoryAll,
     getDataCategoryByID,
+    getDataCategoryTree
 }

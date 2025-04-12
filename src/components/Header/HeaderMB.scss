@@ -1,0 +1,91 @@
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header {
+    width: 100%;
+    border-bottom: 1px solid #eee;
+
+    // Luồng mobile
+    #header-mobile {
+        display: none;
+
+        .header-mobile {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+
+            .hd-mobile_left {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .hd-mobile_center {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 60px;
+            }
+
+            .hd-mobile-logo {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 60px;
+            }
+
+            .hd-mobile_right {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+
+                .button-search-mobile {
+                    background: unset;
+                }
+            }
+
+            .hd-mobile-imglogo {
+                width: 100%;
+                height: 100%;
+            }
+
+            .icon-show-menu {
+                width: 30px;
+                height: 26px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                align-items: center;
+                position: relative;
+                cursor: pointer;
+            }
+
+            .icon-line-showmn {
+                width: 80%;
+                height: 2px;
+                border-radius: 5px;
+                background-color: #000;
+            }
+        }
+    }
+
+    .header-mobile_container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 10px;
+        background: #FFF;
+    }
+}
+
+@media screen and (max-width:900px) {
+    .header {
+        #header-mobile {
+            display: block;
+        }
+    }
+}

@@ -6,7 +6,7 @@ import { fetchNewProducts, fetchFeaturedProducts } from '../redux/features/produ
 import { Helmet } from "react-helmet-async";
 // ==============Import components==============
 // Header
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 // Banner
 import HeroSection from "../components/home/HeroSection";
 // Product

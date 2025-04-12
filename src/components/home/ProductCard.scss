@@ -111,3 +111,29 @@
         width: calc(100% / 2 - 14px);
     }
 }
+
+@media (max-width: 500px) {
+    .product-card {
+        width: calc(50% - 5px);
+
+        .product-image {
+            height: 175px;
+        }
+
+        .product-image-hide {
+            height: 175px;
+        }
+
+        .product-info {
+            .product-meta {
+                color: #000;
+
+                .meta-item {
+                    padding: 0 2px;
+                    font-size: 11px;
+                }
+            }
+        }
+
+    }
+}
