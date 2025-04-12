@@ -187,7 +187,8 @@ img {
     font-weight: 400 !important;
 }
 
-.cl_fff {
+.cl_fff,
+.color_fff {
     color: #fff !important;
 }
 

@@ -1,17 +1,102 @@
-$primary-color: url("/src/assets/images/home/bannerCar.webp") no-repeat;
+// === m_slider ===
 
-.Banner {
-    text-align: center;
-    padding: 50px;
+.m_slider {
+    position: relative;
     width: 100%;
-    min-height: 600px;
-    background: $primary-color;
-    background-size: 100% 100%;
+    max-width: 100%;
+    overflow: hidden;
+    min-height: 200px;
+
+    .m_slides {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        width: 100%;
+        min-height: 200px;
+        max-height: 500px;
+
+        img {
+            width: 100%;
+            min-width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+    }
+
+    button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        &.prev {
+            left: 10px;
+        }
+
+        &.next {
+            right: 10px;
+        }
+    }
 }
 
-@media screen and (min-width:1500px) {
-    .Banner {
-        min-height: 800px;
-        background-size: 100% 100%;
+// === banner ===
+
+.banner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &_top {
+        max-width: 1500px;
+        width: 100%;
+        min-height: 200px;
+    }
+
+    &_content {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+.container_banner_content {
+    gap: 10px;
+    padding: 20px 20px;
+    flex-wrap: wrap;
+    background: #000000;
+
+    @media screen and (max-width: 500px) {
+        padding: 20px 10px;
+    }
+}
+
+.item_banner_content {
+    width: calc(100% / 4 - 8px);
+    flex-direction: column;
+    gap: 10px;
+
+    .item_banner_content_text {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .item_banner_content {
+        width: calc(100% / 2 - 8px);
+        flex-direction: column;
+        gap: 10px;
     }
 }

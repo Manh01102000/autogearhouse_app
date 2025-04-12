@@ -1,0 +1,103 @@
+#header-mobile {
+
+    // navigation
+    .container_navigation_mobile {
+        position: fixed;
+        top: 0;
+        left: 0;
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+        background: #ffffff54;
+        z-index: 2;
+        backdrop-filter: blur(20px);
+        // display: none;
+
+        .navigation_mobile {
+            max-width: 85%;
+            width: 100%;
+            height: 100%;
+            background: #FFF;
+            display: flex;
+            flex-direction: column;
+            animation: slide-left 1s ease;
+
+            .navmobile-top {
+                padding: 20px;
+                box-shadow: 0px 0px 5px #ccc;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .navmobile-center {
+                overflow: auto;
+            }
+
+            .box-icon-showhide {
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                cursor: pointer;
+            }
+
+            .line2-showhide {
+                transform: rotate(90deg);
+            }
+
+            .icon-line-showhide {
+                width: 13px;
+                height: 2px;
+                background: #000;
+                border-radius: 5px;
+                position: absolute;
+                transition: all 0.8s ease;
+            }
+
+            .navmobile-menu-show {
+                display: flex;
+                padding: 15px;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .navmobile-menu-lv {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .navmobile-menu-text {
+                font-size: 15px;
+                line-height: 20px;
+                font-weight: 400;
+                color: #000;
+            }
+
+            .navmobile-menu-lvl0 {
+                border-bottom: 1px dashed #ccc;
+            }
+
+            .navmobile-menu-lvl1 {
+                padding: 0px 20px;
+            }
+
+            .navmobile-menu-child {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .navmobile-menu-lvl2 {
+                padding: 0px 20px;
+            }
+        }
+    }
+}
