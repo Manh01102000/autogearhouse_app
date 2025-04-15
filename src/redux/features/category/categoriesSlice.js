@@ -27,7 +27,7 @@ const authSlice = createSlice({
     name: 'category',
     // Khởi tạo initialState ban đầu Khi app vừa khởi chạy, nếu đã category trước đó thì lấy lại từ localStorage.
     initialState: {
-        category: JSON.parse(localStorage.getItem('category')) || null,
+        category: JSON.parse(localStorage.getItem('category')) || [],
         loading: false,
         error: null,
     },

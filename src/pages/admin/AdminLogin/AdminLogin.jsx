@@ -25,7 +25,7 @@ const AdminLogin = () => {
     // Khai báo hook từ useAuth
     // const { login } = useAuth();
 
-    // Hook sử dụng để điều hướng người dùng sau khi đăng nhập thành công
+    // Hook sử dụng để điều hướng
     const navigate = useNavigate();
 
     // State quản lý việc hiển thị mật khẩu
