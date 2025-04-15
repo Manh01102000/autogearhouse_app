@@ -30,7 +30,7 @@ const HeaderPC = ({ isLogin }) => {
                         <div className='header-pc_top_right'>
                             <ul>
                                 <li><FaSearch /></li>
-                                <li><Link to={'/login'}><FaUser /></Link></li>
+                                <li><Link to={'/dang-nhap-tai-khoan'}><FaUser /></Link></li>
                                 <li><FaBell /></li>
                             </ul>
                         </div>
@@ -65,7 +65,7 @@ const HeaderPC = ({ isLogin }) => {
                                                     <div className="boder-nav-dropdown">
                                                         <div className="nav-dropdown">
                                                             {category.map((item, index) => (
-                                                                <li key={index} className="nav-dropdown-item">
+                                                                <div key={index} className="nav-dropdown-item">
                                                                     <div className="nav-dropdown-title">
                                                                         <Link
                                                                             className="nav-link-title"
@@ -88,7 +88,7 @@ const HeaderPC = ({ isLogin }) => {
                                                                             ))}
                                                                         </ul>
                                                                     )}
-                                                                </li>
+                                                                </div>
                                                             ))}
                                                         </div>
                                                     </div>

@@ -6,7 +6,8 @@ import MainLayout from "../../layouts/MainLayout";
 // Import các trang chính của website.
 import Home from "../../pages/Home";
 import Products from "../../pages/Products";
-import About from "../../pages/About";
+import Login from "../../pages/Login/Login";
+import Register from "../../pages/Register/RegisterAccount";
 import NotFound from "../../pages/NotFound";
 // Cấu hình
 
@@ -16,8 +17,9 @@ const AppRouter = () => {
       {/* Bọc Routes bên trong MainLayout để đảm bảo Header/Footer xuất hiện trên tất cả các trang */}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/dang-nhap-tai-khoan" element={<Login />} />
+        <Route path="/dang-ky-tai-khoan" element={<Register />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/about" element={<About />} />
         {/* Route path="*" bắt tất cả đường dẫn không hợp lệ và hiển thị trang NotFound. */}
         <Route path="*" element={<NotFound />} />
       </Routes>

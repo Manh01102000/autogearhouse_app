@@ -11,15 +11,16 @@ function Header() {
     // Gọi đến createAsyncThunk tên là tree và gửi request đến CategoryService.getDataCategoryTree();
     const dispatch = useDispatch();
     const { category, loading, error } = useSelector((state) => state.category);
-
     useEffect(() => {
-        dispatch(tree());
-    }, [dispatch]);
+        if (!category || category.length == 0) {
+            dispatch(tree());
+        }
+    }, [category, dispatch]);
     const isLogin = false;
     return (
         <>
             <div className="header">
-                <HeaderPC dataCategory={category} />
+                <HeaderPC />
                 <HeaderMB onOpenUserInfo={onOpenUserInfo} isLogin={isLogin} />
             </div>
         </>

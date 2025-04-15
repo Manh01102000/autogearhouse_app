@@ -27,6 +27,33 @@ export const login = createAsyncThunk(
     }
 );
 
+export const registerAccount = createAsyncThunk(
+    'auth/registerAccount', // tên action (sẽ tự sinh ra 3 loại: pending, fulfilled, rejected)
+    async (data, thunkAPI) => {
+        try {
+            // console.log(data);return;
+            const response = await UserService.createUser(data);
+
+            // Nếu login thất bại (result = false), ném lỗi
+            if (!response.result) {
+                throw new Error(response.message || 'tạo tài khoản thất bại');
+            }
+
+            // Nếu thành công, lấy token và user từ response
+            const { token, user } = response.data;
+
+            // Lưu vào localStorage
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('token', token);
+
+            return { user, token };
+        } catch (error) {
+            // Trả lỗi về reducer
+            return thunkAPI.rejectWithValue(error.response?.data?.message || 'tạo tài khoản thất bại');
+        }
+    }
+);
+
 const authSlice = createSlice({
     name: 'auth',
     // Khởi tạo initialState ban đầu Khi app vừa khởi chạy, nếu đã login trước đó thì lấy lại từ localStorage.
@@ -48,6 +75,7 @@ const authSlice = createSlice({
     // xử lý kết quả từ createAsyncThunk
     extraReducers: (builder) => {
         builder
+            // ===============Đăng nhập====================
             // khi đang gửi request
             .addCase(login.pending, (state) => {
                 state.loading = true;
@@ -61,6 +89,24 @@ const authSlice = createSlice({
             })
             // khi thất bại
             .addCase(login.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // ===============Đăng ký===================
+            // khi đang gửi request
+            .addCase(registerAccount.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            // khi thành công cập nhật user và token vào Redux store.
+            .addCase(registerAccount.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload.user;
+                state.token = action.payload.token;
+            })
+            // khi thất bại
+            .addCase(registerAccount.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
