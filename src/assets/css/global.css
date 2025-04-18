@@ -692,7 +692,7 @@ input[type="radio"]:checked::before {
     padding: 8px;
     color: black;
     content: "";
-    background: url("/images/icon/chevron-right.svg") center no-repeat;
+    background: url(../images/icon/chevron-right.svg) center no-repeat;
     width: 20px;
     font-weight: 600;
 }
@@ -795,6 +795,17 @@ input[type="radio"]:checked::before {
 .pagination .next:hover {
     background: #ff4d6d;
     color: #fff;
+}
+
+.container-page {
+    width: 100%;
+    padding: 10px;
+}
+
+.page-detail {
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
 }
 
 /* end pagination */

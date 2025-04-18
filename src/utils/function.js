@@ -202,6 +202,34 @@ function number_format(number, decimals = 0, dec_point = '.', thousands_sep = ',
     return parts.join(dec_point);
 }
 
+// Hàm render link chi tiết sản phẩm
+function productLink(slug, id, title) {
+    const generatedSlug = slug || replaceTitle(title);
+    return `/san-pham/${generatedSlug}-${id}`;
+}
+// Hàm lấy slug, id
+function extractSlugAndId(param) {
+    if (!param) return {};
+
+    // Nếu có cả slug, cả id thì trả về cả 2
+    const match = param.match(/^([a-zA-Z0-9-]+)-(\d+)$/);
+    if (match) {
+        const slug = match[1];
+        const id = match[2];
+        // Kiểm tra slug không chứa ký tự đặc biệt ngoài a-z, A-Z, 0-9 và dấu gạch ngang
+        const isValidSlug = /^[a-zA-Z0-9-]+$/.test(slug);
+        return isValidSlug ? { slug, id } : { id };
+    }
+
+    // Nếu chỉ có số thì trả về id
+    if (/^\d+$/.test(param)) {
+        return { id: param };
+    }
+
+    // Nếu là slug không có id trả về slug
+    const isValidSlug = /^[a-zA-Z0-9-]+$/.test(param);
+    return isValidSlug ? { slug: param } : {};
+}
 
 const dataRole = [
     'Chọn vai trò',
@@ -402,6 +430,8 @@ export {
     Ejstime,
     convertToTimestamp,
     number_format,
+    extractSlugAndId,
+    productLink,
     dataRole,
     dataAdminPosition,
     dataAdminDepartment,
