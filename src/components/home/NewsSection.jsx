@@ -32,7 +32,7 @@ const NewsSection = ({ newsList }) => {
                                             <img className="news_center-img lazyload"
                                                 onError={(e) => {
                                                     e.target.onerror = null;
-                                                    e.target.src = {loadgif};
+                                                    e.target.src = { loadgif };
                                                 }}
                                                 src={item.image}
                                                 alt="anh"

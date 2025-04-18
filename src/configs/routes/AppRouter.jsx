@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 // Import các trang chính của website.
 import Home from "../../pages/Home";
-import Products from "../../pages/Products";
+import ProductDetails from "../../pages/Product/ProductDetails";
 import Login from "../../pages/Login/Login";
 import Register from "../../pages/Register/RegisterAccount";
 import NotFound from "../../pages/NotFound";
@@ -19,7 +19,7 @@ const AppRouter = () => {
         <Route path="/" element={<Home />} />
         <Route path="/dang-nhap-tai-khoan" element={<Login />} />
         <Route path="/dang-ky-tai-khoan" element={<Register />} />
-        <Route path="/products" element={<Products />} />
+        <Route path="/san-pham/:slugId" element={<ProductDetails />} />
         {/* Route path="*" bắt tất cả đường dẫn không hợp lệ và hiển thị trang NotFound. */}
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -4,7 +4,10 @@ import { FaCalendarAlt, FaUsers, FaCogs } from 'react-icons/fa';
 import * as functions from '../../utils/function';
 // icon
 import loadgif from '../../assets/images/home/load.gif';
-// 
+// import function
+import { productLink } from '../../utils/function';
+// import link
+import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
     let product_images_full = product.product_images_full.split(',');
@@ -27,7 +30,9 @@ const ProductCard = ({ product }) => {
                     alt={product.product_name} />
             }
             <div className="product-info">
-                <h3 className="product-name">{product.product_name}</h3>
+                <Link to={productLink(product.product_alias, product.product_id, product.product_name)}>
+                    <h3 className="product-name">{product.product_name}</h3>
+                </Link>
                 <div className="product-price">
                     {functions.number_format(product.product_variants[0].product_price, 0, '.', ',')} đ
                 </div>
