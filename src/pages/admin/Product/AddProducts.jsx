@@ -16,7 +16,6 @@ import icons_plus_file from '../../../assets/images/admin/icons_plus_file.png';
 import icon_delete from '../../../assets/images/admin/icon_delete.png';
 import { useLoading } from "../../../contexts/LoadingContext";
 
-
 const AddProducts = () => {
     // state
     const [showMileage, setShowMileage] = useState(false);
@@ -32,6 +31,14 @@ const AddProducts = () => {
     const [files, setFiles] = useState([]);
     // product type
     const [variants, setVariant] = useState([]);
+    // Giảm giá
+    const [showDiscount, setShowDiscount] = useState(false);
+    const [showDiscountPrice, setShowDiscountPrice] = useState({
+        'type': 'text',
+        'min': '',
+        'max': '',
+        'unit': 'VNĐ',
+    });
     // 
     const navigate = useNavigate();
     const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting }, setError } = useForm();
@@ -41,9 +48,12 @@ const AddProducts = () => {
     // ONSUBMIT
     const onSubmit = async (data) => {
         try {
+            // console.log(data);return;
             showLoading();
             const formData = new FormData();
-
+            //  Chuyển đổi thời gian dạng timestamp
+            data.discount_end_time = Math.floor(new Date(data.discount_end_time).getTime() / 1000);
+            data.discount_start_time = Math.floor(new Date(data.discount_start_time).getTime() / 1000);
             // Xử lý files mới
             files.forEach(file => {
                 const { type, file: actualFile } = file;
@@ -323,7 +333,59 @@ const AddProducts = () => {
         // Cập nhật lại state
         setVariant(newVariants);
     };
+
+    // Thêm khuyến mãi
+    const discount_start_time = watch('discount_start_time');
     
+    const HandleAddDiscount = (e) => {
+        setShowDiscount(true)
+    }
+
+    const HandleDeleteDiscount = (e) => {
+        let parent = e.target.closest('.khuyenmai_bangkm');
+        parent.querySelector('#discount_price').value = 0;
+        parent.querySelector('#discount_type').value = 0;
+        parent.querySelector('#discount_start_time').value = 0;
+        parent.querySelector('#discount_end_time').value = 0;
+        setShowDiscount(false)
+    }
+
+    const HandleChangeDiscType = (e) => {
+        let val = e.target.value;
+        let parent = e.target.closest('.khuyenmai_bangkm');
+        let input = parent.querySelector('#discount_price');
+        if (input) {
+            input.value = 0;
+        }
+
+        if (val == 1) {
+            return setShowDiscountPrice({
+                'type': 'number',
+                'min': '1',
+                'max': '100',
+                'unit': '%',
+            });
+        }
+        setShowDiscountPrice({
+            'type': 'text',
+            'min': '',
+            'max': '',
+            'unit': 'VNĐ',
+        });
+    }
+
+    const HandleChangePriceDiscount = (e) => {
+        let val = e.target.value;
+        if (showDiscountPrice.type === 'number') {
+            if (val > 100) {
+                let input = e.target;
+                if (input) {
+                    input.value = 100;
+                }
+            }
+        }
+    }
+
     return (
         <AdminLayout>
             <div className="admin-product-form">
@@ -883,6 +945,101 @@ const AddProducts = () => {
                             </div>
                         </div>
                     )}
+
+
+                    {/* Khuyến mãi */}
+                    <div className="form-column">
+                        <div className="productForm-col">
+                            <div className="container_ttbh">
+                                <p className="font_s16 line_h20 font_w500 cl_000">Khuyến mãi sản phẩm</p>
+                                <div className="m_khuyemmai">
+                                    <button type="button" className="khuyemai_add_khuyemmai" onClick={HandleAddDiscount}>
+                                        <p className="txt_add_km cursor_pt d_flex al_ct gap_10">+ Thêm khuyến mãi</p>
+                                    </button>
+                                    {showDiscount && (
+                                        <div className="khuyenmai_bangkm">
+                                            <div className="container_km_bangkm d_flex fl_cl gap_10">
+                                                <div className="bkm_xoa_km w100 d_flex jc_end">
+                                                    <img src={icon_delete} width="18px" height="19px" className="icon_xoa_km cursor_pt" onClick={HandleDeleteDiscount} />
+                                                </div>
+                                                <div className="bkm_loai_giatri_km d_flex gap_10">
+                                                    <div className="box_loai_km box_input_infor">
+                                                        <label className="form-label font_w500 cl_000">Loại giảm giá <span className='cl_red'>*</span></label>
+                                                        <div className="container-select">
+                                                            <select className="discount_type select_100" id="discount_type"
+                                                                {...register('discount_type', {
+                                                                    required: 'Vui lòng chọn loại giảm giá',
+                                                                    validate: (value) =>
+                                                                        value != 0 || 'Vui lòng chọn loại giảm giá'
+                                                                })}
+                                                                onChange={HandleChangeDiscType}>
+                                                                <option value="0">Chọn</option>
+                                                                <option value="1">Giảm %</option>
+                                                                <option value="2">Giảm số tiền</option>
+                                                            </select>
+                                                            <div className="box-append-select box-append-discount_type"></div>
+                                                        </div>
+                                                        {errors.discount_type && (
+                                                            <span className="error-text">{errors.discount_type.message}</span>
+                                                        )}
+                                                    </div>
+                                                    <div className="box_giatri_km box_input_infor">
+                                                        <label className="form-label font_w500 cl_000">Giá trị <span className='cl_red'>*</span></label>
+                                                        <div className="giatri_km d_flex al_ct">
+                                                            <input type={showDiscountPrice.type}
+                                                                min={showDiscountPrice.min}
+                                                                max={showDiscountPrice.max}
+                                                                name="discount_price" id="discount_price"
+                                                                {...register('discount_price', {
+                                                                    required: 'Vui lòng nhập giá trị giảm giá',
+                                                                    validate: (value) =>
+                                                                        value != 0 || 'Vui lòng nhập giá trị giảm giá'
+                                                                })}
+                                                                className="discount_price font_s13 line_h16 font_w400 cl_000"
+                                                                onKeyUp={HandleChangePriceDiscount} placeholder="Nhập giá trị giảm giá" />
+                                                            <p className="show_dv_km font_s13 line_h16 font_w400 cl_000">{showDiscountPrice.unit}</p>
+                                                        </div>
+                                                        {errors.discount_price && (
+                                                            <span className="error-text">{errors.discount_price.message}</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="bkm_ngaybd_ngaykt_km d_flex gap_10">
+                                                    <div className="box_bkm_ngaybd box_input_infor">
+                                                        <label className="form-label font_w500 cl_000">Ngày bắt đầu <span className='cl_red'>*</span></label>
+                                                        <input type="date" name="discount_start_time"
+                                                            {...register('discount_start_time', {
+                                                                required: 'Vui lòng chọn ngày bắt đầu giảm giá'
+                                                            })}
+                                                            className="discount_start_time" id="discount_start_time" />
+                                                        {errors.discount_start_time && (
+                                                            <span className="error-text">{errors.discount_start_time.message}</span>
+                                                        )}
+                                                    </div>
+                                                    <div className="box_bkm_ngaykt box_input_infor">
+                                                        <label className="form-label font_w500 cl_000">Ngày kết thúc <span className='cl_red'>*</span></label>
+                                                        <input type="date" name="discount_end_time"
+                                                            {...register('discount_end_time', {
+                                                                required: 'Vui lòng chọn ngày kết thúc giảm giá',
+                                                                validate: (value) => {
+                                                                    if (!discount_start_time) return true;
+                                                                    return new Date(value) > new Date(discount_start_time) || "Ngày kết thúc phải lớn hơn ngày bắt đầu";
+                                                                }
+                                                            })}
+                                                            className="discount_end_time" id="discount_end_time" />
+                                                        {errors.discount_end_time && (
+                                                            <span className="error-text">{errors.discount_end_time.message}</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* Ảnh video sản phẩm */}
                     <div className="form-row boxSaveImgVideo">

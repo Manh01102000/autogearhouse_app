@@ -29,7 +29,7 @@ function ProductDetails() {
     const dispatch = useDispatch();
     const { detailProducts, loadingDetail, errorDetail } = useSelector((state) => state.products);
     const { category, loading, error } = useSelector((state) => state.category);
-    const { brand } = useSelector((state) => state.initAppData);
+    const { brand, modelProduct } = useSelector((state) => state.initAppData);
     useEffect(() => {
         if (id) {
             dispatch(fetchDetailProducts(id));
@@ -126,7 +126,7 @@ function ProductDetails() {
                     <BreadCrumb items={breadCrumb} />
                     <section className='detail-product'>
                         <ProdctDetailTop product={dataProduct} brand={brand} />
-                        <ProdctDetailContent product={dataProduct} />
+                        <ProdctDetailContent product={dataProduct} brand={brand} modelProduct={modelProduct} />
                         <ProdctDetailFooter product={dataProduct} productSuggest={dataProductSuggest} />
                     </section>
 

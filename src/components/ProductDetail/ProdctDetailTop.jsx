@@ -1,10 +1,6 @@
 
 import { FaSquarePhone } from "react-icons/fa6";
 import { IoChatboxOutline } from "react-icons/io5";
-import anhtest1 from '../../assets/images/sample/anhtest1.jpg';
-import anhtest2 from '../../assets/images/sample/anhtest2.jpg';
-import anhtest3 from '../../assets/images/sample/anhtest3.jpg';
-import anhtest4 from '../../assets/images/sample/anhtest4.jpg';
 import truckfast from '../../assets/images/icon/truck-fast.svg';
 import loadgif from '../../assets/images/home/load.gif';
 // Lấy dữ liệu từ function
@@ -19,7 +15,6 @@ const ProdctDetailTop = ({ product, brand }) => {
     const [productImg, setProductImg] = useState([]);
     const [productVariant, setVariant] = useState([]);
     useEffect(() => {
-        console.log(product);
         setProductImg(product?.product_images_full
             ? product.product_images_full.split(',')
             : []);
@@ -73,12 +68,12 @@ const ProdctDetailTop = ({ product, brand }) => {
                         <div className="top-image__left">
                             <div className="top-image__box">
                                 {
-                                    productImg.map((item, index) => {
+                                    productImg.slice(1, 4).map((item, index) => {
                                         return (
                                             <img key={index} className="top-image__small"
                                                 onError={(e) => {
                                                     e.target.onerror = null;
-                                                    e.target.src = { loadgif };
+                                                    e.target.src = loadgif;
                                                 }}
                                                 src={item} alt="anh" />
                                         )
@@ -155,8 +150,12 @@ const ProdctDetailTop = ({ product, brand }) => {
                             <p className="prod-card_text font_s14 font_w500 line_h16 cl_000">Vận chuyển</p>
                             <div className="prod-card_shipping d_flex al_ct gap_10">
                                 <img src={truckfast} width="18" height="18" alt="icon" />
-                                <p className="fee_ship font_s14 mt_5 line_h16 font_w400 cl_000" data-feeship="10000">
-                                    Miễn phí vận chuyển
+                                <p className="fee_ship font_s14 mt_5 line_h16 font_w400 cl_000" data-feeship={product?.product_feeship || 0} >
+                                    {
+                                        product?.product_ship == 1
+                                            ? "Miễn phí vận chuyển"
+                                            : `${functions.number_format(product?.product_feeship || 0, 0, ',', '.')}đ`
+                                    }
                                 </p>
                             </div>
                         </div>

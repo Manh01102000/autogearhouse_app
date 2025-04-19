@@ -515,4 +515,116 @@
         }
     }
 
+    .productForm-col {
+        .container_ttbh {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #F8F8F8;
+            margin: 10px 0px;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .txt_add_km {
+            width: 100%;
+            border: 1px dashed;
+            padding: 5px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 16px;
+            min-height: 35px;
+            color: #000;
+            justify-content: center;
+        }
+
+        .khuyenmai_bangkm {
+            margin-top: 0px;
+        }
+
+        .khuyemai_add_khuyemmai {
+            background: unset;
+            width: 150px;
+        }
+
+        .container_km_bangkm {
+            background: #F8F8F8;
+            width: 100%;
+        }
+
+        .box_input_infor {
+            width: calc(100% / 2 - 5px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bkm_loai_giatri_km {
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .khuyenmai_bangkm {
+            .form-label {
+                display: block;
+                margin-bottom: 8px;
+                color: #34495e;
+                font-weight: 500;
+                font-size: 14px;
+            }
+        }
+
+        :is(.giatri_km, .loai_km) {
+            position: relative;
+            width: 100%;
+            min-height: 35px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px 10px;
+            background: #fff;
+        }
+
+        .discount_type {
+            min-height: 35px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background: #fff;
+            outline: none;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: 'Roboto';
+            color: #333;
+            width: 100%;
+        }
+
+        .discount_price {
+            background: none;
+            width: 90%;
+            outline: none;
+        }
+
+        .show_dv_km {
+            position: absolute;
+            padding: 6px 10px;
+            background: #EDEDED;
+            border-radius: 5px;
+            right: 6px;
+        }
+
+        .discount_start_time,
+        .discount_end_time {
+            width: 100%;
+            padding: 0px 10px;
+            height: 36px;
+            border: 1px solid rgba(51, 51, 51, 0.2);
+            border-radius: 5px;
+            line-height: 36px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+            font-family: 'Roboto';
+        }
+    }
 }
