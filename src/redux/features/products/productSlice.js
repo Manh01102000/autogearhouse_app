@@ -45,6 +45,30 @@ export const fetchDetailProducts = createAsyncThunk(
     }
 )
 
+// Lấy danh sách sản phẩm mới về
+export const fetchSearchProducts = createAsyncThunk(
+    "products/fetchSearchProducts",
+    async (params, { rejectWithValue }) => {
+        try {
+            const page = params.page || 1;
+            const pageSize = params.pageSize || 20;
+            const category = params.categoryID || '';
+            const category_code = params.categoryCodeID || '';
+            const data = {
+                page: page,
+                pageSize: pageSize,
+                category: category,
+                category_code: category_code,
+            }
+            // console.log(data);return;
+            const res = await productService.getProduct(data);
+            return res.data.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Đã xảy ra lỗi khi lấy sản phẩm mới');
+        }
+    }
+);
+
 const productSlice = createSlice({
     name: "products",
     initialState: {
@@ -60,6 +84,10 @@ const productSlice = createSlice({
         detailProducts: [],
         loadingDetail: false,
         errorDetail: null,
+        // --- tìm kiếm sản phẩm ---
+        searchCateProducts: [],
+        loadingSearchCate: false,
+        errorSearchCate: null,
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -102,6 +130,19 @@ const productSlice = createSlice({
             .addCase(fetchDetailProducts.rejected, (state, action) => {
                 state.loadingDetail = false;
                 state.errorDetail = action.payload;
+            })
+            // --- tìm kiếm sản phẩm (theo danh mục)---
+            .addCase(fetchSearchProducts.pending, (state) => {
+                state.loadingSearchCate = true;
+                state.errorSearchCate = null;
+            })
+            .addCase(fetchSearchProducts.fulfilled, (state, action) => {
+                state.loadingSearchCate = false;
+                state.searchCateProducts = action.payload;
+            })
+            .addCase(fetchSearchProducts.rejected, (state, action) => {
+                state.loadingSearchCate = false;
+                state.errorSearchCate = action.payload;
             });
     },
 });

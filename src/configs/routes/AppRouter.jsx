@@ -9,6 +9,8 @@ import ProductDetails from "../../pages/Product/ProductDetails";
 import Login from "../../pages/Login/Login";
 import Register from "../../pages/Register/RegisterAccount";
 import NotFound from "../../pages/NotFound";
+// Tìm kiếm
+import SearchPage from "../../pages/SearchPage/SearchPage";
 // Cấu hình
 
 const AppRouter = () => {
@@ -20,6 +22,9 @@ const AppRouter = () => {
         <Route path="/dang-nhap-tai-khoan" element={<Login />} />
         <Route path="/dang-ky-tai-khoan" element={<Register />} />
         <Route path="/san-pham/:slugId" element={<ProductDetails />} />
+        {/* Tìm kiếm */}
+        <Route path="/:slugCate" element={<SearchPage />} />
+        <Route path="/:slugCate/:slugSubCate" element={<SearchPage />} />
         {/* Route path="*" bắt tất cả đường dẫn không hợp lệ và hiển thị trang NotFound. */}
         <Route path="*" element={<NotFound />} />
       </Routes>

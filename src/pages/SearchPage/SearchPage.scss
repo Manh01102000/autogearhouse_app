@@ -1,0 +1,50 @@
+#searchMain {
+    width: 100%;
+    min-height: 400px;
+    padding: 20px 0px;
+    background-color: #f3f5f7;
+
+    .search-page {
+        width: 100%;
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+
+        .search-page__content {
+            width: 100%;
+            float: left;
+
+            .search-page__content__rigth {
+                width: 30%;
+                position: sticky;
+                top: 10px;
+                float: left;
+
+                img {
+                    width: 360px;
+                    height: 360px;
+                    border-radius: 20px;
+                }
+            }
+
+            .search-page__content__left {
+                width: calc(100% - 370px);
+                margin-right: 10px;
+                float: left;
+
+                .product-section {
+                    border-radius: 20px;
+                    padding: 20px;
+                    background: #FFF;
+
+                    .product-list {
+                        .product-card {
+                            width: calc(100% / 3 - 14px);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

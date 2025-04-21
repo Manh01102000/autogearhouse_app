@@ -68,7 +68,7 @@ const ProdctDetailTop = ({ product, brand }) => {
                         <div className="top-image__left">
                             <div className="top-image__box">
                                 {
-                                    productImg.slice(1, 4).map((item, index) => {
+                                    productImg.slice(1, 5).map((item, index) => {
                                         return (
                                             <img key={index} className="top-image__small"
                                                 onError={(e) => {

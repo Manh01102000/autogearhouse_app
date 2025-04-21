@@ -127,7 +127,7 @@ function ProductDetails() {
                     <section className='detail-product'>
                         <ProdctDetailTop product={dataProduct} brand={brand} />
                         <ProdctDetailContent product={dataProduct} brand={brand} modelProduct={modelProduct} />
-                        <ProdctDetailFooter product={dataProduct} productSuggest={dataProductSuggest} />
+                        <ProdctDetailFooter productSuggest={dataProductSuggest} />
                     </section>
 
                 </div>
