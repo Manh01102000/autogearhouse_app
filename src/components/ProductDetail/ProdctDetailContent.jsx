@@ -50,6 +50,37 @@ const ProdctDetailContent = ({ product, brand, modelProduct }) => {
         }
     }
 
+    // Luồng đánh giá sản phẩm
+    const [formData, setFormData] = useState({
+        userName: '',
+        rating: 0,
+        review_title: '',
+        review_comment: '',
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleRatingChange = (rating) => {
+        setFormData(prev => ({ ...prev, rating }));
+    };
+
+    const handleSubmitReview = (e) => {
+        e.preventDefault();
+        if (formData.rating === 0) {
+            alert('Vui lòng chọn số sao đánh giá');
+            return;
+        }
+        onSubmit(formData);
+        setFormData({
+            userName: '',
+            rating: 0,
+            review_title: '',
+            review_comment: '',
+        });
+    };
 
     return (
         <>
@@ -101,9 +132,10 @@ const ProdctDetailContent = ({ product, brand, modelProduct }) => {
                                     </div>
                                     <div className="product-getcontent__showcontent">
                                         <h2 className='title'>Mô tả</h2>
-                                        <div className='show-detail__content'>
-                                            {functions.nl2br(product?.product_description)}
-                                        </div>
+                                        <div
+                                            className="show-detail__content"
+                                            dangerouslySetInnerHTML={{ __html: functions.nl2br(product?.product_description) }}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -140,28 +172,32 @@ const ProdctDetailContent = ({ product, brand, modelProduct }) => {
                             <div className="detail-product__content__tab tab-3">
                                 <div className="product_getcontent">
                                     <div className="product-getcontent__showcontent">
-                                        - Chiều dài cáp từ 15 đến 30m
-                                        - Tời có sẵn điều khiển từ xa và điều khiển dây
-                                        - Ngoài ra chúng tôi có loại tời chỉ có điều khiển dây
-                                        Thông số của tời điện ắc quy 12V loại 2000lbs
-                                        - Dùng để kéo ngang khoảng 900kg, và nâng hạ thẳng đứng khoảng 150kg
-                                        - Cáp dài 15m
-                                        - Động cơ: 0.7 kw
-                                        - Tời có sẵn chân đế, dẫn hướng cáp, móc tời, điều khiển từ xa và điều khiển có dây
-                                        - Tự trọng tời nặng khoảng 7kg
-                                        Ngoài loại điện 12v, chúng tôi còn có loại điện 24v
-                                        Quý khách hàng cần tư vấn hoặc đặt mua hàng vui lòng liên hệ: 0917 5566 83 (ms Hương, Điện Thoại hoặc Zalo)
-                                        - Chiều dài cáp từ 15 đến 30m
-                                        - Tời có sẵn điều khiển từ xa và điều khiển dây
-                                        - Ngoài ra chúng tôi có loại tời chỉ có điều khiển dây
-                                        Thông số của tời điện ắc quy 12V loại 2000lbs
-                                        - Dùng để kéo ngang khoảng 900kg, và nâng hạ thẳng đứng khoảng 150kg
-                                        - Cáp dài 15m
-                                        - Động cơ: 0.7 kw
-                                        - Tời có sẵn chân đế, dẫn hướng cáp, móc tời, điều khiển từ xa và điều khiển có dây
-                                        - Tự trọng tời nặng khoảng 7kg
-                                        Ngoài loại điện 12v, chúng tôi còn có loại điện 24v
-                                        Quý khách hàng cần tư vấn hoặc đặt mua hàng vui lòng liên hệ: 0917 5566 83 (ms Hương, Điện Thoại hoặc Zalo)
+                                        <form className="review-form" onSubmit={handleSubmitReview}>
+                                            <h3>Viết đánh giá của bạn</h3>
+
+                                            <div className="form-group">
+                                                <label>Đánh giá của bạn</label>
+                                                <div className="rating-input">
+                                                    {[...Array(5)].map((item, i) => (
+                                                        <span key={i} className={`star ${i < formData.rating ? 'filled' : ''}`} onClick={() => handleRatingChange(i + 1)} >
+                                                            ★
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label>Tiêu đề</label>
+                                                <input type="text" name="review_title" value={formData.review_title} onChange={handleChange} required />
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label>Nội dung đánh giá</label>
+                                                <textarea name="review_comment" value={formData.review_comment} onChange={handleChange} required />
+                                            </div>
+
+                                            <button type="submit" className="btn-submit">Gửi đánh giá</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

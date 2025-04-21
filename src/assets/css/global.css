@@ -653,7 +653,7 @@ input[type="radio"]:checked::before {
 
 /* end loader v2 */
 
-.divh1 {
+.main-h1 {
     width: 100%;
     display: flex;
     align-items: center;

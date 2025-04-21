@@ -6,7 +6,7 @@ import './ProductSection.scss';
 const ProductSection = ({ dataH2, loading, dataProducts = [] }) => {
   return (
     <section className="product-section">
-      <h2 className="section-title">{dataH2}</h2>
+      {dataH2 && (<h2 className="section-title">{dataH2}</h2>)}
       {loading && <div id="loading" style={{ display: loading ? "block" : "none" }}>
         <div className="loading">
           <span className="loading-circle"></span>
